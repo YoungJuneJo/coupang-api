@@ -49,5 +49,7 @@ def recommend():
     else:
         return jsonify({"error": "Link generation failed"}), 500
 
-# ✅ Replit에서 서버 포트 설정
-app.run(host="0.0.0.0", port=8000)
+if __name__ == "__main__":
+    import os
+    port = int(os.environ.get("PORT", 8000))
+    app.run(host="0.0.0.0", port=port)
