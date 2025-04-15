@@ -1,23 +1,26 @@
 openapi: 3.1.0
 info:
-  title: Coupang Recommend API
-  version: 1.0.0
+  title: Coupang Product Recommend API
+  version: 1.1.0
+  description: 쿠팡 키워드 기반 추천 상품과 제휴 링크를 반환하는 API입니다.
 servers:
   - url: https://coupang-api.onrender.com
 paths:
   /recommend:
     get:
-      operationId: getCoupangDeepLink
-      summary: 쿠팡 딥링크 생성
+      operationId: getRecommendedProducts
+      summary: 쿠팡 상품 추천 및 제휴 링크 제공
+      description: 키워드로 관련된 인기 제품들을 추천하고, 각 제품별 쿠팡 제휴 링크를 포함한 정보를 반환합니다.
       parameters:
         - name: keyword
           in: query
           required: true
+          description: 쿠팡에서 검색할 키워드 (예: 무선 이어폰)
           schema:
             type: string
       responses:
         '200':
-          description: 성공
+          description: 추천 상품 리스트와 제휴 링크 응답
           content:
             application/json:
               schema:
@@ -25,5 +28,29 @@ paths:
                 properties:
                   keyword:
                     type: string
-                  link:
+                    description: 사용자가 검색한 키워드
+                  products:
+                    type: array
+                    description: 추천된 상품 리스트
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                          description: 제품 이름
+                        summary:
+                          type: string
+                          description: 주요 특징 또는 요약 설명
+                        review:
+                          type: string
+                          description: 리뷰 요약
+                        link:
+                          type: string
+                          description: 해당 제품의 쿠팡 파트너스 제휴 링크
+                  searchLink:
                     type: string
+                    description: 키워드 전체 검색용 쿠팡 제휴 링크
+        '400':
+          description: 잘못된 요청 (키워드 누락 등)
+        '500':
+          description: 서버 오류
