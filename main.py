@@ -21,22 +21,50 @@ def generate_hmac(method, url_path):
 
 @app.route("/recommend")
 def recommend():
-    keyword = request.args.get("keyword", "무선 이어폰")
+    keyword = request.args.get("keyword", "무선 이어폰").lower()
     encoded_keyword = urllib.parse.quote(keyword)
 
-    # ✨ 추천할 상품들 (하드코딩된 예시 데이터)
-    products = [
-        {
-            "name": "QCY T13 무선 이어폰",
-            "summary": "가성비 좋고 배터리 오래감",
-            "review": "리뷰가 10만 개 넘는 국민 이어폰"
-        },
-        {
-            "name": "삼성 갤럭시 버즈2",
-            "summary": "노이즈 캔슬링 탑재, 통화품질 우수",
-            "review": "디자인이 예쁘고 착용감도 좋아요"
-        }
-    ]
+    # ✅ 키워드 기반 상품 추천 분기
+    if "노트북" in keyword:
+        products = [
+            {
+                "name": "레노버 아이디어패드 Slim1",
+                "summary": "라이젠 5 + 16GB, 256GB SSD 탑재, 가볍고 무난한 가성비 노트북",
+                "review": "문서 작업, 인터넷, 인강용으로 인기 많아요"
+            },
+            {
+                "name": "ASUS 비보북 S15 OLED",
+                "summary": "고화질 OLED 디스플레이, 라이젠 7, 대용량 배터리",
+                "review": "영상 편집이나 디자인 작업에도 적합해요"
+            }
+        ]
+    elif "선풍기" in keyword:
+        products = [
+            {
+                "name": "신일 리모컨 스탠드 선풍기",
+                "summary": "조용하고 바람 강도 조절이 쉬운 전통 강자",
+                "review": "리모컨 편리하고 바람도 시원해요"
+            },
+            {
+                "name": "샤오미 미지아 무선 선풍기",
+                "summary": "BLDC 모터, 무선 작동, 감성 디자인",
+                "review": "조용하고 선도 깔끔해서 인테리어에 좋아요"
+            }
+        ]
+    else:
+        # 기본 이어폰 추천
+        products = [
+            {
+                "name": "QCY T13 무선 이어폰",
+                "summary": "가성비 좋고 배터리 오래감",
+                "review": "리뷰가 10만 개 넘는 국민 이어폰"
+            },
+            {
+                "name": "삼성 갤럭시 버즈2",
+                "summary": "노이즈 캔슬링 탑재, 통화품질 우수",
+                "review": "디자인이 예쁘고 착용감도 좋아요"
+            }
+        ]
 
     # 각 제품에 대해 쿠팡 검색 URL 생성
     coupang_urls = [
